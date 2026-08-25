@@ -48,8 +48,10 @@ function PersonForm({ person, onClose, onSaved }) {
 
     const [photo, setPhoto] = useState(null);
     const [preview, setPreview] = useState("");
+    const [removePhoto, setRemovePhoto] = useState(false);
 
     const [saving, setSaving] = useState(false);
+
     const [error, setError] = useState("");
 
 
@@ -160,10 +162,22 @@ function PersonForm({ person, onClose, onSaved }) {
 
 
         setPhoto(null);
-
+        setRemovePhoto(false);
         setError("");
 
     }, [person]);
+
+
+    /* =========================================
+       REMOVE PHOTO
+    ========================================= */
+
+    function handleRemovePhoto() {
+        setPhoto(null);
+        setPreview("");
+        setRemovePhoto(true);
+        setError("");
+    }
 
 
     /* =========================================
@@ -231,6 +245,7 @@ function PersonForm({ person, onClose, onSaved }) {
 
 
         setPhoto(file);
+        setRemovePhoto(false);
 
         setPreview(
             URL.createObjectURL(file)
@@ -238,6 +253,7 @@ function PersonForm({ person, onClose, onSaved }) {
 
         setError("");
     }
+
 
 
     /* =========================================
@@ -380,23 +396,19 @@ function PersonForm({ person, onClose, onSaved }) {
         try {
 
             /* -------------------------------------
-               KEEP OLD PHOTO IF NO NEW PHOTO
+               RESOLVE PHOTO URL
             ------------------------------------- */
 
             let photoUrl =
                 person?.photo_url || null;
 
-
-            /* -------------------------------------
-               UPLOAD NEW PHOTO
-            ------------------------------------- */
-
-            if (photo) {
-
+            if (removePhoto) {
+                photoUrl = null;
+            } else if (photo) {
                 photoUrl =
                     await uploadPhoto(photo);
-
             }
+
 
 
             /* -------------------------------------
@@ -870,18 +882,35 @@ function PersonForm({ person, onClose, onSaved }) {
                             </div>
 
 
-                            {/* UPLOAD */}
+                            {/* UPLOAD & REMOVE */}
 
                             <div className="photo-upload-content">
 
-                                <label
-                                    htmlFor="person-photo"
-                                    className="upload-button"
-                                >
-                                    {photo
-                                        ? "CHANGE IMAGE"
-                                        : "CHOOSE IMAGE"}
-                                </label>
+                                <div className="photo-button-row">
+
+                                    <label
+                                        htmlFor="person-photo"
+                                        className="upload-button"
+                                    >
+                                        {preview
+                                            ? "CHANGE IMAGE"
+                                            : "CHOOSE IMAGE"}
+                                    </label>
+
+                                    {preview && (
+
+                                        <button
+                                            type="button"
+                                            className="remove-photo-button"
+                                            onClick={handleRemovePhoto}
+                                            disabled={saving}
+                                        >
+                                            REMOVE IMAGE
+                                        </button>
+
+                                    )}
+
+                                </div>
 
                                 <input
                                     id="person-photo"
@@ -900,6 +929,7 @@ function PersonForm({ person, onClose, onSaved }) {
                                 </span>
 
                             </div>
+
 
                         </div>
 

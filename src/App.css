@@ -2508,11 +2508,47 @@ button {
     color: #b0dcf2;
 }
 
+.photo-button-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.remove-photo-button {
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    border: 1px solid rgba(230, 90, 110, 0.25);
+    color: #e58896;
+    background: rgba(180, 45, 65, 0.12);
+    font-family: monospace;
+    font-size: 8px;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.remove-photo-button:hover:not(:disabled) {
+    border-color: rgba(245, 100, 120, 0.5);
+    background: rgba(200, 45, 70, 0.24);
+    color: #ff9da9;
+    transform: translateY(-1px);
+}
+
+.remove-photo-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .photo-upload-content > span {
     color: #456277;
 
     font-size: 9px;
 }
+
 
 
 /* Active toggle */
